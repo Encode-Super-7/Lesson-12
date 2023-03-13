@@ -8,8 +8,7 @@ async function main() {
 
   // The contract address used here is for the MyToken contract
   const contractAddress = args[2];
-  const tokensMinted = args[3];
-  const giveTokensToAddress = args[4];
+  const voterAddress = args[3];
 
   const provider = new ethers.providers.AlchemyProvider(
     "goerli",
@@ -27,15 +26,12 @@ async function main() {
   console.log(`Attaching to TokenizedBallot contract at address ${contractAddress} ...`);
   const deployedContract = contract.attach(contractAddress);
   console.log("Successfully attached!");
-  console.log(`Minting ${tokensMinted} tokens for account at address ${giveTokensToAddress}`)
+  console.log(`Checking vote power for address ${voterAddress}`)
 
-  const tx = await deployedContract.connect(signer).mint(giveTokensToAddress, ethers.utils.parseEther(tokensMinted));
-  await tx.wait()
-  // Check the Balance of account1
-  const account1Balance = await deployedContract.balanceOf(giveTokensToAddress)
+  const votingPower = await deployedContract.getVotes(voterAddress);
+
   console.log(
-        `The balance of ${giveTokensToAddress} is ${ethers.utils.formatEther(account1Balance)} Tokens`
-  )
+        `The voting power for account with address ${voterAddress} is ${ethers.utils.formatEther(votingPower)} tokens`)
 }
 
 main().catch((error) => {

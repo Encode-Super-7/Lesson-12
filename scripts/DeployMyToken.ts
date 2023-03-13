@@ -18,7 +18,7 @@ async function main() {
 
   const wallet = new ethers.Wallet(privateKey);
   const signer = wallet.connect(provider);
-  console.log(`Signer is ${signer}`)
+  
   const signers = await ethers.getSigners();
 
   const balance = await signer.getBalance();
